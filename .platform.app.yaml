@@ -2,11 +2,13 @@ name: app
 type: php:8.0
 disk: 1024
 web:
-  locations:
-    '/':
-      root: 'web'
-      passthru: '/index.html'
-      expires: 600
+    commands:
+        start: /app/dumb-init /app/start.sh
+    locations:
+        '/':
+            root: 'web'
+            passthru: '/index.html'
+            expires: 600
 hooks:
     build: |
         wget -O dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.4/dumb-init_1.2.4_x86_64
