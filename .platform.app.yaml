@@ -1,0 +1,22 @@
+name: app
+type: php:8.0
+disk: 1024
+web:
+  locations:
+    '/':
+      root: 'web'
+      passthru: '/index.html'
+      expires: 600
+hooks:
+    build: |
+        wget -O dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.4/dumb-init_1.2.4_x86_64
+        chmod +x dumb-init
+        ./config/filebeat/scripts/install.sh
+    deploy: |
+        if [ ! "$(ls -A filebeat)" ]; then
+             ./config/filebeat/scripts/config.sh
+        fi
+mounts:
+    '/filebeat':
+        source: local
+        source_path: filebeat
